@@ -205,6 +205,10 @@ footer p{
     .btn-small{
         transform: translate(9px, -1px);
     }
+
+    .task-table td:nth-child(2) {
+        font-size: 10px;
+    }
 }
 
 
