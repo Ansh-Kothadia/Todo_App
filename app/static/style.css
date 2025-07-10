@@ -141,8 +141,12 @@ footer p{
 }
 
 .task-table{
+    /* width: 100%;
+    border-collapse: collapse; */
+    /* table-layout: fixed; */
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; 
 }
 
 .task-table th,
@@ -150,10 +154,57 @@ footer p{
     text-align: left;
     padding: 12px;
     border-bottom: 1px solid #ddd;
+    /* word-wrap: break-word;
+    word-break: break-word;    
+    white-space: normal; */
 }
+
+.task-table td:nth-child(2),
+.task-table th:nth-child(2) {
+    width: 50%; /* Adjust as needed */
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+
 
 .task-table th{
     background: color #f2f2f2; ;
+    /* width: 40%; */
+}
+/* .task-table td:nth-child(4),
+.task-table th:nth-child(4) {
+    width: 180px; Adjust this value as needed
+} */
+
+@media (max-width: 680px) {
+    /* .task-table {
+        font-size: 14px;
+    } */
+
+    .badge{
+        font-size:12px ;
+    }
+
+    .task-table td:nth-child(2), .task-table th:nth-child(2) {
+    width: 20%;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    }
+
+}
+
+@media(max-width:400px){
+    .task-form input[type="text"] {
+        font-size: 12px;
+    }
+    .btn-delete{
+            transform: translate(5px, 4px);
+    }
+    .btn-small{
+        transform: translate(9px, -1px);
+    }
 }
 
 
@@ -171,11 +222,22 @@ footer p{
     background-color: #c82333;
 }
 
+
+
+
+
 .badge{
     padding: 5px 10px;
     border-radius: 4px;
     font-weight: bold;
     color: white;
+     /* padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+    white-space: nowrap; Prevent text from breaking
+    text-align: center; */
 }
 
 .badge.pending{
