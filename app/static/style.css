@@ -161,7 +161,7 @@ footer p{
 
 .task-table td:nth-child(2),
 .task-table th:nth-child(2) {
-    width: 50%; /* Adjust as needed */
+    width: 34%; /* Adjust as needed */
     word-wrap: break-word;
     word-break: break-word;
     white-space: normal;
