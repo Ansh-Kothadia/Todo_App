@@ -2,7 +2,30 @@
 {% block title %}profile{% endblock %}
 
 {% block content %}
-<div class="task-box">
-    
+
+<div class="task-box" style="word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;" >
+    <h2 style="text-align: center;">Profile</h2>
+    <table class="task-table">
+            <thead>
+                <tr>
+                    <th>User id</th>
+                    <th>Name</th>
+                    <th>Password</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>{{data.uid}}</td>
+                    <td>{{data.username}}</td>
+                    <td>{{data.password}}</td>
+                    <td>{{data.email}}</td>
+                </tr>
+              
+            </tbody>
+        </table>
 </div>
 {% endblock %}

@@ -77,11 +77,19 @@ def delete(task_id):
 
 
 
+@tasks_bp.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    else:
+        user = Register.query.filter_by(uid=session['user_id']).first()
+
+        return render_template('profile.html',data=user)
+
 # @tasks_bp.route('/profile')
 # def profile():
-#     if 'uid' not in session:
+#     if 'user_id' not in session:
 #         return redirect(url_for('auth.login'))
     
-#     data = Register.query.filter_by(user_id=session['uid']).all()
-
-#     return render_template('profile.html',data=data)
+#     user = Register.query.filter_by(uid=session['user_id']).first()
+#     return render_template('profile.html', data=user)
