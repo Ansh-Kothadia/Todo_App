@@ -102,7 +102,7 @@ footer p{
     color: white;
     border: none;
     padding: 12px;
-    width: 94%;
+    width: 97%;
     font-size: 16px;
     border-radius: 4px;
     cursor: pointer;
@@ -200,6 +200,9 @@ footer p{
      font-size:10px ;
     }
 
+    .btn{
+        width: 94%;
+    }
 }
 
 @media(max-width:400px){
@@ -301,6 +304,8 @@ footer p{
     color: white;
     cursor: pointer;
     z-index: 1000;
+    font-family: serif;
+    font-size: 20px;
 }
 
 /* 🌙 DARK MODE STYLES */
