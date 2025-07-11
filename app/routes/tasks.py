@@ -26,9 +26,10 @@ def add_task():
         return redirect( url_for('auth.login'))
     
     title=request.form.get('title')
+    description=request.form.get('description')
 
     if title:
-        new_task = Task(title=title, status='Pending', user_id=session['user_id'])
+        new_task = Task(title=title, status='Pending', user_id=session['user_id'],description=description)
         db.session.add(new_task)
         db.session.commit()
         flash('Task added successfully','success')
@@ -85,6 +86,16 @@ def profile():
         user = Register.query.filter_by(uid=session['user_id']).first()
 
         return render_template('profile.html',data=user)
+
+
+@tasks_bp.route('/description/<int:task_id>',methods=["GET","POST"])
+def description(task_id):
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    else:
+       data= Task.query.filter_by(user_id=session['user_id'],id=task_id).first()
+
+    return render_template('description.html',data=data)
 
 # @tasks_bp.route('/profile')
 # def profile():

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %} task-description {% endblock %}
+
+{% block content %}
+ <div class="task-box">
+    <div class="details">
+    <h2>{{data.title}}</h2>
+    <p>{{data.description}}</p>
+    </div>
+    <div class="status_details" style="display: flex; justify-content: space-between;">
+        <span class="badge {{data.status|lower}}">{{data.status}}</span>
+        <a href="{{url_for('tasks.view_tasks')}}">back</a>
+    </div>
+ </div>
+{% endblock %}

@@ -125,6 +125,7 @@ footer p{
     display: flex;
     gap: 10px;
     margin-bottom: 25px;
+    flex-direction: column;
 }
 
 .task-form input[type="text"]{
@@ -138,6 +139,7 @@ footer p{
 .task-form .btn{
     padding: 12px 20px;
     font-size: 16px;
+    width: 100%;
 }
 
 .task-table{
@@ -162,9 +164,9 @@ footer p{
 .task-table td:nth-child(2),
 .task-table th:nth-child(2) {
     /* width: 34%; Adjust as needed */
-    word-wrap: break-word;
+    /* word-wrap: break-word;
     word-break: break-word;
-    white-space: normal;
+    white-space: normal; */
 }
 
 

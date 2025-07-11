@@ -13,6 +13,7 @@ class Task(db.Model):
     __tablename__='task'
     id=db.Column(db.Integer, primary_key=True)
     title=db.Column(db.String(100), nullable=False)
+    description=db.Column(db.String(300), nullable=False)
     status=db.Column(db.String(20), default="Pending")
     user_id = db.Column(db.Integer, db.ForeignKey('register.uid'), nullable=False)
 
