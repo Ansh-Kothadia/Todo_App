@@ -1,5 +1,5 @@
 #importing necessary libraries
-from flask import Blueprint,render_template,request,session,redirect,url_for,flash
+from flask import Blueprint,render_template,request,session,redirect,url_for,flash,abort
 from app import db
 from app.models import Register
 
@@ -50,3 +50,12 @@ def register():
             db.session.commit()
             flash('Successfully Registered','success')
     return render_template("register.html")
+
+
+@auth_bp.route('/admin')
+def admin():
+    if session.get('user_id') == 1:
+        Users=Register.query.all()
+        return render_template('admin.html',Users=Users,session=session)
+    else:
+        return abort(403)

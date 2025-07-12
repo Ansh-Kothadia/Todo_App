@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %} Admin {% endblock %}
+{% block content %}
+<div class="task-box">
+      <table class="task-table">
+            <thead>
+                <tr>
+                    <th>Uid</th>
+                    <th>Username</th>
+                    
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in Users  %}
+                <tr>
+                    <td>{{user.uid}}</td>
+                    <td>{{user.username}}</td>
+                    
+                    <td>{{user.email}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% endblock %}

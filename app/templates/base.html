@@ -23,6 +23,10 @@
                 {% if 'user' in session %}
                     <a href="{{url_for('auth.logout')}}">Logout</a>
                     <a href="{{url_for('tasks.profile')}}">Profile</a>
+                    <a href="{{url_for('tasks.send_task')}}">Share</a>
+                    {% if session.get('user_id') == 1 and session.get('user')=='jethalal gada'%}
+                        <a href="{{url_for('auth.admin')}}">Admin</a>
+                    {% endif %}
                 {% else %}
                     <a href="{{url_for('auth.login')}}">Login</a>
                     <a href="{{url_for('auth.register')}}">Register</a>
@@ -54,6 +58,6 @@
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 
-</script>
+
 </body>
 </html>
