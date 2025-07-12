@@ -6,6 +6,7 @@ class Register(db.Model):
     username=db.Column(db.String(100),nullable=False)
     password=db.Column(db.String(100),nullable=False)
     email=db.Column(db.String(200),unique=True)
+    role=db.Column(db.String(20),default="user")
     tasks = db.relationship('Task', backref='user', lazy=True)
 
 

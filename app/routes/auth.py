@@ -18,8 +18,13 @@ def login():
         if user and user.password==password :
             session['user']=user.username
             session['user_id'] = user.uid 
+            session['role']=user.role
             flash('Login Successfully','success')
-            return redirect(url_for('tasks.view_tasks'))
+
+            if session.get('user_id') and session.get('role') == 'admin':
+                return redirect(url_for('auth.admin'))
+            else:
+                return redirect(url_for('tasks.view_tasks'))
 
         else:
             flash('Invalid username or password','danger')
@@ -54,7 +59,7 @@ def register():
 
 @auth_bp.route('/admin')
 def admin():
-    if session.get('user_id') == 1:
+    if session.get('user_id') and session.get('role') == 'admin':
         Users=Register.query.all()
         return render_template('admin.html',Users=Users,session=session)
     else:

@@ -104,3 +104,18 @@ def description(task_id):
     
 #     user = Register.query.filter_by(uid=session['user_id']).first()
 #     return render_template('profile.html', data=user)
+
+
+
+
+@tasks_bp.route("/send_task",methods=["GET","POST"])
+def send_task():
+    send_data=None
+    if request.method=="POST":
+        search_user=request.form.get('search')
+        send_data=Register.query.filter_by(username=search_user).first()
+        if send_data:
+            flash('User Found !!!','success')
+        else:
+            flash('User not found !!!','danger')
+    return render_template("send_task.html",send_data=send_data)
