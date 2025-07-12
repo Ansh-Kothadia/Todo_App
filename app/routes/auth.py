@@ -1,7 +1,7 @@
 #importing necessary libraries
 from flask import Blueprint,render_template,request,session,redirect,url_for,flash,abort
 from app import db
-from app.models import Register
+from app.models import Register,Task
 
 #Using the blueprint object for auth_bp 
 auth_bp=Blueprint('auth',__name__)
@@ -62,5 +62,14 @@ def admin():
     if session.get('user_id') and session.get('role') == 'admin':
         Users=Register.query.all()
         return render_template('admin.html',Users=Users,session=session)
+    else:
+        return abort(403)
+    
+
+@auth_bp.route('/admin_task')
+def admin_task():
+    if session.get('user_id') and session.get('role') == 'admin':
+        Tasks=Task.query.all()
+        return render_template('admin_task.html',Tasks=Tasks,session=session)
     else:
         return abort(403)

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} Admin_tasks {% endblock %}
+{% block content %}
+<div class="task-box">
+      <table class="task-table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Title</th>
+                    <th>description</th>
+                    <th>Status</th>
+                    <th>User_id</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in Tasks  %}
+                <tr>
+                    <td>{{task.id}}</td>
+                    <td>{{task.title}}</td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.status}}</td>
+                    <td>{{task.user_id}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% endblock %}
