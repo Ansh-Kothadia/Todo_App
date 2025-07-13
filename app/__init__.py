@@ -1,8 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
-# Create database object globally
+# Create database and bcrypt object globally
 db = SQLAlchemy()
+bcrypt=Bcrypt()
 
 def create_app():
     app = Flask(__name__)
@@ -12,6 +14,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)  # ✅ Use init_app, not db.__init__
+    bcrypt.init_app(app)
 
     # ✅ Import models inside the app context so they register with SQLAlchemy
     with app.app_context():

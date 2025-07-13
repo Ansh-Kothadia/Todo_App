@@ -1,10 +1,13 @@
 #importing necessary libraries
 from flask import Blueprint,render_template,request,session,redirect,url_for,flash,abort
+from app import bcrypt
 from app import db
 from app.models import Register,Task
 
 #Using the blueprint object for auth_bp 
 auth_bp=Blueprint('auth',__name__)
+
+
 
 
 #Defining route for login 
@@ -15,7 +18,7 @@ def login():
         password=request.form.get('password')
 
         user=Register.query.filter_by(username=username).first()
-        if user and user.password==password :
+        if user and bcrypt.check_password_hash(user.password,password) :
             session['user']=user.username
             session['user_id'] = user.uid 
             session['role']=user.role
@@ -48,9 +51,14 @@ def register():
         username=request.form.get("username")
         password=request.form.get("password")
         email=request.form.get("email")
+        hash_password=bcrypt.generate_password_hash(password).decode('utf-8')
 
         if username and password and email:
-            new_register=Register(username=username,password=password,email=email)
+            existing_user = Register.query.filter_by(username=username).first()
+            if existing_user:
+                flash('Username already exists', 'danger')
+                return redirect(url_for('auth.register'))
+            new_register=Register(username=username,password=hash_password,email=email)
             db.session.add(new_register)
             db.session.commit()
             flash('Successfully Registered','success')
