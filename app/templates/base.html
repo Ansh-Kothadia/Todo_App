@@ -22,12 +22,14 @@
                 {%  if session.get('user_id') and session.get('role') == 'admin'%}
                  <a href="{{url_for('auth.admin')}}">Admin_Register</a>
                  <a href="{{url_for('auth.admin_task')}}">Admin_Tasks</a>
+                 <a href="{{url_for('auth.admin_transfer')}}">Admin_Tasks</a>
                 <a href="{{url_for('auth.logout')}}">Logout</a>
                 {% else %}
                     <a href="{{url_for('tasks.view_tasks')}}">Home</a>
                     {% if 'user' in session %}
                         <a href="{{url_for('auth.logout')}}">Logout</a>
                         <a href="{{url_for('tasks.profile')}}">Profile</a>
+                        <a href="{{url_for('tasks.notifications')}}">notifications</a>
                     {% else %}
                         <a href="{{url_for('auth.login')}}">Login</a>
                         <a href="{{url_for('auth.register')}}">Register</a>

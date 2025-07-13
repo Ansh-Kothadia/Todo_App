@@ -1,7 +1,7 @@
 #importing necessary libraries
 from flask import Blueprint,render_template,request,session,redirect,url_for,flash
 from app import db
-from app.models import Task,Register
+from app.models import Task,Register,Transfer_Task
 
 
 #Using the blueprint object for tasks_bp 
@@ -95,27 +95,138 @@ def description(task_id):
     else:
        data= Task.query.filter_by(user_id=session['user_id'],id=task_id).first()
 
-    return render_template('description.html',data=data)
-
-# @tasks_bp.route('/profile')
-# def profile():
-#     if 'user_id' not in session:
-#         return redirect(url_for('auth.login'))
-    
-#     user = Register.query.filter_by(uid=session['user_id']).first()
-#     return render_template('profile.html', data=user)
+    return render_template('description.html',data=data,task_id=task_id)
 
 
 
-
-@tasks_bp.route("/send_task",methods=["GET","POST"])
+# @tasks_bp.route("/send_task",methods=["GET","POST"])
+# def send_task():
+#     send_data=None
+#     transfer_data=None
+#     task_id=request.args.get('task_id')
+#     sender=session.get('user_id')
+#     if request.method=="POST":
+#         search_user=request.form.get('search')
+#         send_data=Register.query.filter_by(username=search_user).first()
+#         receiver=send_data.uid
+#         if send_data:
+#             flash('User Found !!!','success')
+#             transfer_data={
+#                 'sender_id':sender,
+#                 'receiver_id':receiver,
+#                 'task_id':task_id
+#             }
+#         else:
+#             flash('User not found !!!','danger')
+#     return render_template("send_task.html",send_data=send_data,transfer_data=transfer_data)
+@tasks_bp.route("/send_task", methods=["GET", "POST"])
 def send_task():
-    send_data=None
-    if request.method=="POST":
-        search_user=request.form.get('search')
-        send_data=Register.query.filter_by(username=search_user).first()
+    send_data = None
+    transfer_data = None
+
+    # Step 1: Save task_id in session if it's a GET request
+    if request.method == "GET":
+        task_id = request.args.get('task_id')
+        session['task_id_to_send'] = task_id
+
+    sender = session.get('user_id')
+    task_id = session.get('task_id_to_send')  # Step 2: retrieve it for POST
+
+    if request.method == "POST":
+        search_user = request.form.get('search')
+        send_data = Register.query.filter_by(username=search_user).first()
+
         if send_data:
-            flash('User Found !!!','success')
+            flash('User Found !!!', 'success')
+            receiver = send_data.uid
+            transfer_data = {
+                'sender_id': sender,
+                'receiver_id': receiver,
+                'task_id': task_id  # ✅ this will now be correct
+            }
         else:
-            flash('User not found !!!','danger')
-    return render_template("send_task.html",send_data=send_data)
+            flash('User not found !!!', 'danger')
+
+    return render_template("send_task.html", send_data=send_data, transfer_data=transfer_data)
+
+@tasks_bp.route('/transfer',methods=["POST"])
+def transfer():
+    sender_id = request.form.get("sender_id")
+    receiver_id = request.form.get("receiver_id")
+    task_id = request.form.get("task_id")
+
+    if not sender_id or not receiver_id or not task_id:
+        flash("Missing transfer data", "danger")
+        return redirect(url_for("tasks.send_task"))
+    
+    new_transfer = Transfer_Task(sender_id=sender_id, receiver_id=receiver_id, task_id=task_id)
+    db.session.add(new_transfer)
+    db.session.commit()
+
+    flash('Task Sent', 'success')
+    return redirect(url_for('tasks.send_task'))
+
+
+# @tasks_bp.route('/transfer',methods=["POST"])
+# def transfer():
+#     sender_id = request.form.get("sender_id")
+#     receiver_id = request.form.get("receiver_id")
+#     task_id = request.form.get("task_id")
+    
+#     if not sender_id or not receiver_id or not task_id:
+#         flash("Missing transfer data", "danger")
+#         return redirect(url_for("tasks.send_task"))
+    
+#     new_transfer = Transfer_Task(sender_id=sender_id,receiver_id=receiver_id,task_id=task_id)
+#     db.session.add(new_transfer)
+#     db.session.commit()
+#     if new_transfer:
+#         flash('Task Sended','success')
+#     else:
+#         flash('error occured','danger')
+    
+#     return redirect(url_for('tasks.send_task'))
+
+
+
+# @tasks_bp.route('/notifications')
+# def notifications():
+#     if 'user_id' not in session:
+#         return redirect(url_for('auth.login')) 
+#     user_id=session.get('user_id')
+#     received_tasks=Transfer_Task.query.filter_by(receiver_id=user_id).all()
+    
+#     task_details = []
+#     for task in received_tasks:
+#         task_details.append({
+#         'sender_name': task.sender.username,
+#         'title': task.task.title,
+#         'description': task.task.description
+#     })
+
+#     return render_template('notification.html',task_details=task_details)
+
+@tasks_bp.route('/notifications')
+def notifications():
+    if 'user_id' in session:
+        user_id = session.get('user_id')
+        received_tasks = Transfer_Task.query.filter_by(receiver_id=user_id).all()
+
+        task_details = []
+        for task in received_tasks:
+            # Safety check: make sure related task and sender exist
+            if task.task and task.sender:
+                task_details.append({
+                    'sender_name': task.sender.username,
+                    'title': task.task.title,
+                    'description': task.task.description
+                })
+            else:
+                # Optional: Log or handle broken reference
+                print(f"Broken transfer record: {task.transfer_id}")
+
+        return render_template('notification.html', task_details=task_details)
+    else:
+        return redirect(url_for('auth.login'))
+
+

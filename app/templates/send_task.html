@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Send tasks{% endblock %}
+
+{% block content %}
+<div class="task-box">
+    <form action="{{url_for('tasks.send_task')}}" method="post" class="task-form">
+        <input type="text" name="search" id="search" placeholder="Enter username/Email id" required>
+        <input type="submit" value="Search" class="btn">
+    </form>
+</div>
+
+{% if send_data %}
+<div class="task-box" style="word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;" >
+    <h2 style="text-align: center;">Profile</h2>
+    <table class="task-table">
+            <thead>
+                <tr>
+                    
+                    <th>User</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    
+                    <td>{{send_data.username}}</td>
+                    <td>{{send_data.email}}</td>
+                </tr>
+              
+            </tbody>
+        </table>
+        <br>
+       <form action="{{ url_for('tasks.transfer') }}" method="post">
+            <input type="hidden" name="sender_id" value="{{ transfer_data.sender_id }}">
+            <input type="hidden" name="receiver_id" value="{{ transfer_data.receiver_id }}">
+            <input type="hidden" name="task_id" value="{{ transfer_data.task_id }}">
+            <button type="submit" class="btn">Transfer Task</button>
+        </form>
+
+</div>
+{% endif %}
+
+{% endblock %}

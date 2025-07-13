@@ -2,7 +2,7 @@
 from flask import Blueprint,render_template,request,session,redirect,url_for,flash,abort
 from app import bcrypt
 from app import db
-from app.models import Register,Task
+from app.models import Register,Task,Transfer_Task
 
 #Using the blueprint object for auth_bp 
 auth_bp=Blueprint('auth',__name__)
@@ -79,5 +79,20 @@ def admin_task():
     if session.get('user_id') and session.get('role') == 'admin':
         Tasks=Task.query.all()
         return render_template('admin_task.html',Tasks=Tasks,session=session)
+    else:
+        return abort(403)
+    
+# @auth_bp.route('/admin_notification')
+# def admin_notification():
+#     if session.get('user_id') and session.get('role') == 'admin':
+#         Tasks=Transfer_Task.query.all()
+#         return render_template('admin_notification.html',Tasks=Tasks,session=session)
+#     else:
+#         return abort(403)
+@auth_bp.route('/admin_transfer')
+def admin_transfer():
+    if session.get('user_id') and session.get('role') == 'admin':
+        Transfers = Transfer_Task.query.all()
+        return render_template('admin_transfer.html', Transfers=Transfers, session=session)
     else:
         return abort(403)

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %} Admin Transfers {% endblock %}
+{% block content %}
+<div class="task-box">
+    <h2>Transferred Tasks</h2>
+    <table class="task-table">
+        <thead>
+            <tr>
+                <th>Transfer ID</th>
+                <th>Sender Name</th>
+                <th>Receiver Name</th>
+                <th>Task Title</th>
+                <th>Task Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transfer in Transfers %}
+            <tr>
+                <td>{{ transfer.transfer_id }}</td>
+                <td>{{ transfer.sender.username if transfer.sender else 'N/A' }}</td>
+                <td>{{ transfer.receiver.username if transfer.receiver else 'N/A' }}</td>
+                <td>{{ transfer.task.title if transfer.task else 'N/A' }}</td>
+                <td>{{ transfer.task.description if transfer.task else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
