@@ -215,6 +215,31 @@ def transfer():
 
 #     return render_template('notification.html',task_details=task_details)
 
+# @tasks_bp.route('/notifications')
+# def notifications():
+#     if 'user_id' in session:
+#         user_id = session.get('user_id')
+#         received_tasks = Transfer_Task.query.filter_by(receiver_id=user_id).all()
+
+#         task_details = []
+#         for task in received_tasks:
+#             # Safety check: make sure related task and sender exist
+#             if task.task and task.sender:
+#                 task_details.append({
+#                     'sender_name': task.sender.username,
+#                     'title': task.task.title,
+#                     'description': task.task.description
+#                 })
+#                 session['transfer_id']=task.transfer_id
+#             else:
+#                 # Optional: Log or handle broken reference
+#                 print(f"Broken transfer record: {task.transfer_id}")
+
+#         return render_template('notification.html', task_details=task_details,transfer_id=session['transfer_id'])
+#     else:
+#         return redirect(url_for('auth.login'))
+
+
 @tasks_bp.route('/notifications')
 def notifications():
     if 'user_id' in session:
@@ -223,19 +248,15 @@ def notifications():
 
         task_details = []
         for task in received_tasks:
-            # Safety check: make sure related task and sender exist
             if task.task and task.sender:
                 task_details.append({
                     'sender_name': task.sender.username,
                     'title': task.task.title,
-                    'description': task.task.description
+                    'description': task.task.description,
+                    'transfer_id': task.transfer_id  # Add this line
                 })
-                session['transfer_id']=task.transfer_id
-            else:
-                # Optional: Log or handle broken reference
-                print(f"Broken transfer record: {task.transfer_id}")
 
-        return render_template('notification.html', task_details=task_details,transfer_id=session['transfer_id'])
+        return render_template('notification.html', task_details=task_details)
     else:
         return redirect(url_for('auth.login'))
 

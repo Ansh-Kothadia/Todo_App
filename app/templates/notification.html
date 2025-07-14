@@ -15,12 +15,9 @@
         <input type="hidden" name="title" value="{{task.title}}">
         <input type="hidden" name="description" value="{{task.description}}">
         <input type="submit" value="Add" class="share">
-        <a href="{{url_for('tasks.deleteNotify',transfer_id=transfer_id)}}" class="share-delete">Reject</a>
+        <a href="{{url_for('tasks.deleteNotify', transfer_id=task.transfer_id)}}" class="share-delete">Reject</a>
       </form>
-
-        
-       
-        </div>
+    </div>
  </div>
 {% endfor %}
 {% else %}
