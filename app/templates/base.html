@@ -29,7 +29,7 @@
                     {% if 'user' in session %}
                         <a href="{{url_for('auth.logout')}}">Logout</a>
                         <a href="{{url_for('tasks.profile')}}">Profile</a>
-                        <a href="{{url_for('tasks.notifications')}}">notifications</a>
+                        <a href="{{url_for('tasks.notifications')}}">Notifications</a>
                     {% else %}
                         <a href="{{url_for('auth.login')}}">Login</a>
                         <a href="{{url_for('auth.register')}}">Register</a>

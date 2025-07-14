@@ -41,6 +41,8 @@ def add_task():
 #Defining route for toggle_status 
 @tasks_bp.route('/toggle/<int:task_id>',methods=["POST"])
 def toggle_status(task_id):
+    if 'user_id' in session:
+        user_id = session.get('user_id')
     task = Task.query.filter_by(id=task_id, user_id=session['user_id']).first() 
 
     if task:
@@ -61,6 +63,8 @@ def toggle_status(task_id):
 #Defining route for clear_tasks 
 @tasks_bp.route('/clear',methods=['POST'])
 def clear_tasks():
+    if 'user_id' in session:
+        user_id = session.get('user_id')
     Task.query.filter_by(user_id=session['user_id']).delete() 
     db.session.commit()
     flash('All tasks cleared!','info')
@@ -71,6 +75,8 @@ def clear_tasks():
 #Defining route for deleting particular task
 @tasks_bp.route('/delete/<int:task_id>',methods=["POST"])
 def delete(task_id):
+    if 'user_id' in session:
+        user_id = session.get('user_id')
     Task.query.filter_by(user_id=session['user_id'],id=task_id).delete()
     db.session.commit()
     flash('task cleared!','info')
@@ -123,7 +129,8 @@ def description(task_id):
 def send_task():
     send_data = None
     transfer_data = None
-
+    if 'user_id' in session:
+        user_id = session.get('user_id')
     # Step 1: Save task_id in session if it's a GET request
     if request.method == "GET":
         task_id = request.args.get('task_id')
@@ -151,6 +158,8 @@ def send_task():
 
 @tasks_bp.route('/transfer',methods=["POST"])
 def transfer():
+    if 'user_id' in session:
+        user_id = session.get('user_id')
     sender_id = request.form.get("sender_id")
     receiver_id = request.form.get("receiver_id")
     task_id = request.form.get("task_id")
@@ -221,12 +230,50 @@ def notifications():
                     'title': task.task.title,
                     'description': task.task.description
                 })
+                session['transfer_id']=task.transfer_id
             else:
                 # Optional: Log or handle broken reference
                 print(f"Broken transfer record: {task.transfer_id}")
 
-        return render_template('notification.html', task_details=task_details)
+        return render_template('notification.html', task_details=task_details,transfer_id=session['transfer_id'])
     else:
         return redirect(url_for('auth.login'))
 
+
+
+
+@tasks_bp.route('/addNotification',methods=["POST","GET"])
+def addNotify():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    
+    if request.method == "POST":
+        title=request.form.get('title')
+        description=request.form.get('description')
+    
+    add_notify=Task(title=title, status='Pending', user_id=session['user_id'],description=description)
+    db.session.add(add_notify)
+    db.session.commit()
+    if add_notify:
+        flash('task added successfully','success')
+        deleteNotify=Transfer_Task.query.filter_by(transfer_id=session['transfer_id']).delete()
+        db.session.commit()
+    else:
+        flash('task not added successfully','danger')
+    
+    return render_template('notification.html')
+
+
+@tasks_bp.route('/deleteNotification/<int:transfer_id>')
+def deleteNotify(transfer_id):
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    
+    if transfer_id:
+        deleteNotify=Transfer_Task.query.filter_by(transfer_id=transfer_id).delete()
+        db.session.commit()
+        if deleteNotify:
+            flash('Notification Deleted','danger')
+    
+    return render_template('notification.html')
 
