@@ -121,6 +121,62 @@ footer p{
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+.share-box{
+    max-width: 700px;
+    margin: 40px auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);    
+}
+
+
+.share{
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 9px;
+    width: 97%;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.share:hover{
+    background-color: #0056b3;
+}
+.share-delete{
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 9px;
+    width: 97%;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.share-delete:hover{
+    background-color: #c82333;
+}
+.share-form{
+  gap: 10px;
+    margin-bottom: 25px;   
+}
+
+.share-form input[type="text"]{
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.share-form .btn{
+    padding: 12px 20px;
+    font-size: 16px;
+    width: 100%;
+}
+
 .task-form{
     display: flex;
     gap: 10px;
@@ -183,6 +239,10 @@ footer p{
     /* .task-table {
         font-size: 14px;
     } */
+     .share{
+        font-size: 12px;
+        padding: 7px;
+     }
 
     .badge{
         font-size:12px ;
@@ -218,6 +278,9 @@ footer p{
 
     .task-table td:nth-child(2) {
         font-size: 10px;
+    }
+    nav{
+        font-size: 12px;
     }
 }
 
@@ -324,7 +387,18 @@ body.dark header {
 }
 
 
-
+body.dark .share{
+     background-color: #005ec2;
+}
+body.dark .share:hover {
+    background-color: #0049a0;
+}
+body.dark .share-delete{
+     background-color: #b02a37;
+}
+body.dark .share-delete:hover {
+    background-color: #941f2b;
+}
 body.dark nav a {
     color: #f1f1f1;
 }
@@ -341,7 +415,8 @@ body.dark footer {
 
 /* Change background of login-box and task-box */
 body.dark .login-box,
-body.dark .task-box {
+body.dark .task-box,
+body.dark .share-box {
     background-color: #1e1e1e;
     color: #ffffff;
 }
