@@ -263,26 +263,52 @@ def notifications():
 
 
 
-@tasks_bp.route('/addNotification',methods=["POST","GET"])
+# @tasks_bp.route('/addNotification',methods=["POST","GET"])
+# def addNotify():
+#     if 'user_id' not in session:
+#         return redirect(url_for('auth.login'))
+    
+#     if request.method == "POST":
+#         title=request.form.get('title')
+#         description=request.form.get('description')
+    
+#     add_notify=Task(title=title, status='Pending', user_id=session['user_id'],description=description)
+#     db.session.add(add_notify)
+#     db.session.commit()
+#     if add_notify:
+#         flash('task added successfully','success')
+#         deleteNotify=Transfer_Task.query.filter_by(transfer_id=session['transfer_id']).delete()
+#         db.session.commit()
+#     else:
+#         flash('task not added successfully','danger')
+    
+#     return render_template('notification.html')
+@tasks_bp.route('/addNotification', methods=["POST", "GET"])
 def addNotify():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
     
     if request.method == "POST":
-        title=request.form.get('title')
-        description=request.form.get('description')
-    
-    add_notify=Task(title=title, status='Pending', user_id=session['user_id'],description=description)
-    db.session.add(add_notify)
-    db.session.commit()
-    if add_notify:
-        flash('task added successfully','success')
-        deleteNotify=Transfer_Task.query.filter_by(transfer_id=session['transfer_id']).delete()
+        title = request.form.get('title')
+        description = request.form.get('description')
+        transfer_id = request.form.get('transfer_id')  # ✅ Get from form
+
+        add_notify = Task(title=title, status='Pending', user_id=session['user_id'], description=description)
+        db.session.add(add_notify)
         db.session.commit()
-    else:
-        flash('task not added successfully','danger')
-    
-    return render_template('notification.html')
+
+        if add_notify:
+            flash('Task added successfully', 'success')
+            # ✅ Use transfer_id from form, not session
+            Transfer_Task.query.filter_by(transfer_id=transfer_id).delete()
+            db.session.commit()
+        else:
+            flash('Task not added successfully', 'danger')
+
+        return redirect(url_for('tasks.notifications'))  # ✅ Better to redirect than re-render here
+
+    return redirect(url_for('tasks.notifications'))  # Fallback for GET request
+
 
 
 @tasks_bp.route('/deleteNotification/<int:transfer_id>')
