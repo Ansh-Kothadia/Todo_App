@@ -9,14 +9,34 @@ tasks_bp=Blueprint('tasks',__name__)
 
 
 #Defining route for home page or view_tasks 
-@tasks_bp.route('/')
+# @tasks_bp.route('/')
+# def view_tasks():
+#     if 'user_id' not in session:
+#         return redirect(url_for('auth.login'))
+    
+#     tasks = Task.query.filter_by(user_id=session['user_id']).all()
+
+#     return render_template('tasks.html',tasks=tasks)
+
+
+
+# Defining route for home page or view_tasks 
+@tasks_bp.route('/',methods=["POST","GET"])
 def view_tasks():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
-    
-    tasks = Task.query.filter_by(user_id=session['user_id']).all()
+    filter='all'
+    if request.method=="POST":
+        filter=request.form.get('status')
 
-    return render_template('tasks.html',tasks=tasks)
+        if filter=='all':
+            tasks = Task.query.filter_by(user_id=session['user_id']).all()
+        else:
+            tasks = Task.query.filter_by(user_id=session['user_id'],status=filter).all()
+    else:    
+        tasks = Task.query.filter_by(user_id=session['user_id']).all()
+
+    return render_template('tasks.html',tasks=tasks,filter=filter)
 
 
 #Defining route for add_tasks 
@@ -105,26 +125,7 @@ def description(task_id):
 
 
 
-# @tasks_bp.route("/send_task",methods=["GET","POST"])
-# def send_task():
-#     send_data=None
-#     transfer_data=None
-#     task_id=request.args.get('task_id')
-#     sender=session.get('user_id')
-#     if request.method=="POST":
-#         search_user=request.form.get('search')
-#         send_data=Register.query.filter_by(username=search_user).first()
-#         receiver=send_data.uid
-#         if send_data:
-#             flash('User Found !!!','success')
-#             transfer_data={
-#                 'sender_id':sender,
-#                 'receiver_id':receiver,
-#                 'task_id':task_id
-#             }
-#         else:
-#             flash('User not found !!!','danger')
-#     return render_template("send_task.html",send_data=send_data,transfer_data=transfer_data)
+
 @tasks_bp.route("/send_task", methods=["GET", "POST"])
 def send_task():
     send_data = None
@@ -176,68 +177,6 @@ def transfer():
     return redirect(url_for('tasks.send_task'))
 
 
-# @tasks_bp.route('/transfer',methods=["POST"])
-# def transfer():
-#     sender_id = request.form.get("sender_id")
-#     receiver_id = request.form.get("receiver_id")
-#     task_id = request.form.get("task_id")
-    
-#     if not sender_id or not receiver_id or not task_id:
-#         flash("Missing transfer data", "danger")
-#         return redirect(url_for("tasks.send_task"))
-    
-#     new_transfer = Transfer_Task(sender_id=sender_id,receiver_id=receiver_id,task_id=task_id)
-#     db.session.add(new_transfer)
-#     db.session.commit()
-#     if new_transfer:
-#         flash('Task Sended','success')
-#     else:
-#         flash('error occured','danger')
-    
-#     return redirect(url_for('tasks.send_task'))
-
-
-
-# @tasks_bp.route('/notifications')
-# def notifications():
-#     if 'user_id' not in session:
-#         return redirect(url_for('auth.login')) 
-#     user_id=session.get('user_id')
-#     received_tasks=Transfer_Task.query.filter_by(receiver_id=user_id).all()
-    
-#     task_details = []
-#     for task in received_tasks:
-#         task_details.append({
-#         'sender_name': task.sender.username,
-#         'title': task.task.title,
-#         'description': task.task.description
-#     })
-
-#     return render_template('notification.html',task_details=task_details)
-
-# @tasks_bp.route('/notifications')
-# def notifications():
-#     if 'user_id' in session:
-#         user_id = session.get('user_id')
-#         received_tasks = Transfer_Task.query.filter_by(receiver_id=user_id).all()
-
-#         task_details = []
-#         for task in received_tasks:
-#             # Safety check: make sure related task and sender exist
-#             if task.task and task.sender:
-#                 task_details.append({
-#                     'sender_name': task.sender.username,
-#                     'title': task.task.title,
-#                     'description': task.task.description
-#                 })
-#                 session['transfer_id']=task.transfer_id
-#             else:
-#                 # Optional: Log or handle broken reference
-#                 print(f"Broken transfer record: {task.transfer_id}")
-
-#         return render_template('notification.html', task_details=task_details,transfer_id=session['transfer_id'])
-#     else:
-#         return redirect(url_for('auth.login'))
 
 
 @tasks_bp.route('/notifications')
@@ -263,26 +202,7 @@ def notifications():
 
 
 
-# @tasks_bp.route('/addNotification',methods=["POST","GET"])
-# def addNotify():
-#     if 'user_id' not in session:
-#         return redirect(url_for('auth.login'))
-    
-#     if request.method == "POST":
-#         title=request.form.get('title')
-#         description=request.form.get('description')
-    
-#     add_notify=Task(title=title, status='Pending', user_id=session['user_id'],description=description)
-#     db.session.add(add_notify)
-#     db.session.commit()
-#     if add_notify:
-#         flash('task added successfully','success')
-#         deleteNotify=Transfer_Task.query.filter_by(transfer_id=session['transfer_id']).delete()
-#         db.session.commit()
-#     else:
-#         flash('task not added successfully','danger')
-    
-#     return render_template('notification.html')
+
 @tasks_bp.route('/addNotification', methods=["POST", "GET"])
 def addNotify():
     if 'user_id' not in session:
@@ -323,4 +243,3 @@ def deleteNotify(transfer_id):
             flash('Notification Deleted','danger')
     
     return render_template('notification.html')
-
