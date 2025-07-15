@@ -493,3 +493,62 @@ body.dark .btn-clear:hover{
 .theme-transition {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
+
+
+
+
+
+
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  width: 95%;
+}
+
+.select-wrapper label {
+  font-weight: 500;
+  color: #1e2937;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.select-wrapper select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
+    appearance: none;
+    /* background-image: url(data:image/svg+xml;charset=US-ASCII,%3Csvg width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23111827' stroke-width='2' d='M5 8l5 5 5-5'/%3E%3C/svg%3E); */
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    color: #111827;
+    cursor: pointer;
+}
+
+.select-wrapper select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-color: #3b82f6;
+}
+
+body.dark .select-wrapper {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .select-wrapper select {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20'%3E%3Cpath d='M5 8l5 5 5-5' stroke='%23ffffff' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+}
